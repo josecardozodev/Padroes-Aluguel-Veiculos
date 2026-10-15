@@ -93,3 +93,5 @@ class CriarMoto extends CriarVeiculo {
 //Teste da implementação
 const criar = new CriarCarro();
 const carro = criar.cadastrarVeiculo("Chevrolet Chevette","ABC1B34");
+
+console.log(carro);
