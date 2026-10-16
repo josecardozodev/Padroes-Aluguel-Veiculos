@@ -29,6 +29,8 @@ class SistemaLocadora {
 }
 
 //Teste da implementação
+console.log("SINGLETON")
+
 const sistema1 = SistemaLocadora.obterInstancia();
 const sistema2 = SistemaLocadora.obterInstancia();
 
@@ -91,7 +93,87 @@ class CriarMoto extends CriarVeiculo {
 }
 
 //Teste da implementação
+console.log("\nFACTORY METHOD")
+
 const criar = new CriarCarro();
 const carro = criar.cadastrarVeiculo("Chevrolet Chevette","ABC1B34");
 
 console.log(carro);
+
+//=================================================================
+
+/*
+Implementação do Abstract Factory
+Definido como um modelo de planos de aluguel (Básico e remium), que se encaixam no conceito de 'Famílias' do padrão.
+*/
+
+interface Seguro {
+    contratar(): void;
+}
+
+interface Assistencia {
+    ativar(): void;
+}
+
+interface FabricaAluguel {
+    criarSeguro(): Seguro;
+    criarAssistencia(): Assistencia;
+}
+
+//Família | Aluguel Básico
+class SeguroBasico implements Seguro {
+    contratar(): void {
+        console.log("Seguro básico contratado");
+    }
+}
+
+class AssistenciaBasica implements Assistencia {
+    ativar(): void {
+        console.log("Assistência básica ativada.");
+    }
+}
+
+//Fábrica | Aluguel Básico
+class FabricaBasico implements FabricaAluguel {
+    criarSeguro(): Seguro {
+        return new SeguroBasico();
+    }
+
+    criarAssistencia(): Assistencia {
+        return new AssistenciaBasica();
+    }
+}
+
+//Família | Aluguel Premium
+class SeguroPremium implements Seguro {
+    contratar(): void {
+        console.log("Seguro premium contratado.")
+    }
+}
+
+class AssistenciaPremium implements Assistencia {
+    ativar(): void {
+        console.log("Assistência premium ativada.")
+    }
+}
+
+//Fábrica | Aluguel Premium
+class FabricaPremium implements FabricaAluguel {
+    criarSeguro(): Seguro {
+        return new SeguroPremium();
+    }
+
+    criarAssistencia(): Assistencia {
+        return new AssistenciaPremium();
+    }
+}
+
+//Teste da implementação
+console.log("\nABSTRACT FACTORY")
+
+const fabrica = new FabricaPremium();
+const seguro = fabrica.criarSeguro();
+const assistencia = fabrica.criarAssistencia();
+
+seguro.contratar();
+assistencia.ativar();

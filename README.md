@@ -5,6 +5,7 @@
 Ao baixar a pasta do projeto, abrí-la no CMD ou Terminal equivalente e executar:
 
 npm init -y
+
 npm install -D typescript tsx
 
 Para executar o projeto:
