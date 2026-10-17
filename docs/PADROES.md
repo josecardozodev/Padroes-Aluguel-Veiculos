@@ -18,11 +18,15 @@ Esse padrão ajuda na escabilidade. Caso eu precisasse cadastrar outros veículo
 Onde: src/index.ts | Linha 106
 Por quê: permite criação de "famílias" de objetos relacionados entre si. Dentro do escopo, está sendo utilizado como um serviço de escolha de planos de aluguel (Básico ou Premium).
 
-Como existem vários objetos para criar e não só um, como no caso da criação de carros no Factory Method, o Abstract supre a necessidade de criar grupos de objetos relacionados, tendo esse grau à mais de complexidade em comparação ao Factory.
+Como existem vários objetos para criar para cada plano e não um (como no caso da criação de carros no Factory Method), o Abstract supre a necessidade de criar grupos de objetos relacionados, tendo esse grau à mais de complexidade em comparação ao Factory.
+
+
+# Builder
+Onde: src/index.ts | Linha 184
+Por quê: esse padrão auxilia na criação de objetos complexos que possuem vários parâmetros e parâmetros opcionais. 
+
+Dentro do escopo, o defini como um serviço da reserva do aluguel, como se fosse um formulário no qual apenas certos campos são de preenchimento obrigatório.
 
 # Demais planejamentos pré-implementação:
-
-Builder: penso em implementar como o serviço de aluguel. Como esse padrão utiliza de vários elementos e precisa que o usuário final preencha com várias informações, imagino que serviria como um "formulário" no qual você preenche os dados necessários para efetuar o aluguel. 
-Como haveriam vários aluguéis com dados diferentes mas utilizando da mesma base, creio que esse padrão se encaixa bem.
 
 Prototype: possivelmente irei utilizar para clonar modelos dos veículos ou algo semelhante.

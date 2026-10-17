@@ -177,3 +177,110 @@ const assistencia = fabrica.criarAssistencia();
 
 seguro.contratar();
 assistencia.ativar();
+
+//=================================================================
+
+/*
+Implementação do Builder
+Definido como o serviço de preenchimento da reserva do veículo. O Builder facilita a criação de objetos complexos com parâmetros opcionais, com cada um tendo uma própria função e entrega o objeto pronto só quando solicitado.
+*/
+
+interface Reserva {
+    cliente: string;
+    cpf?: string;
+    veiculo: string;
+    dataRetirada: string;
+    dataDevolucao: string;
+    quilometragem?: string;
+    anoFabricacao?: string;
+    valor: number;
+}
+
+class ReservaBuilder {
+    private clienteReserva = "";
+    private cpfReserva?: string;
+    private veiculoReserva = "";
+    private dataRetiradaReserva = "";
+    private dataDevolucaoReserva = "";
+    private quilometragemReserva?: string;
+    private anoFabricacaoReserva?: string;
+    private valorReserva = 0;
+
+    defCliente(cliente: string) {
+        this.clienteReserva = cliente;
+        return this;
+    }
+
+    defCPF(cpf: string) {
+        this.cpfReserva = cpf;
+        return this;
+    }
+
+    defVeiculo(veiculo: string) {
+        this.veiculoReserva = veiculo;
+        return this;
+    }
+
+    defDataRetirada(dataRetirada: string) {
+        this.dataRetiradaReserva = dataRetirada;
+        return this;
+    }
+
+    defDataDevolucao(dataDevolucao: string) {
+        this.dataDevolucaoReserva = dataDevolucao;
+        return this;
+    }
+
+    defQuilometragem(quilometragem: string) {
+        this.quilometragemReserva = quilometragem;
+        return this;
+    }
+
+    defAnoFabricacao(anoFabricacao: string) {
+        this.anoFabricacaoReserva = anoFabricacao;
+        return this;
+    }
+    
+    defValor(valor: number) {
+        this.valorReserva = valor;
+        return this;
+    }
+
+    build(): Reserva {
+        const reserva: Reserva = {
+            cliente: this.clienteReserva,
+            veiculo: this.veiculoReserva,
+            dataRetirada: this.dataRetiradaReserva,
+            dataDevolucao: this.dataDevolucaoReserva,
+            valor: this.valorReserva,
+        };
+
+        if(this.cpfReserva !== undefined) {
+            reserva.cpf = this.cpfReserva;
+        }
+
+        if(this.quilometragemReserva !== undefined) {
+            reserva.quilometragem = this.quilometragemReserva;
+        }
+
+        if(this.anoFabricacaoReserva !== undefined) {
+            reserva.anoFabricacao = this.anoFabricacaoReserva;
+        }
+
+        return reserva;
+    }
+}
+
+//Teste da implementação
+console.log("\nBUILDER")
+
+const reserva = new ReservaBuilder()
+    .defCliente("José Cardozo")
+    .defVeiculo("Honda Civic")
+    .defDataRetirada("15/09/2026")
+    .defDataDevolucao("16/10;2026")
+    .defQuilometragem("70000")
+    .defValor(800)
+    .build();
+
+console.log(reserva)
