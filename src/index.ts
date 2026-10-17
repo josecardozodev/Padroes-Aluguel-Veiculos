@@ -28,14 +28,6 @@ class SistemaLocadora {
     }
 }
 
-//Teste da implementação
-console.log("SINGLETON")
-
-const sistema1 = SistemaLocadora.obterInstancia();
-const sistema2 = SistemaLocadora.obterInstancia();
-
-console.log(sistema1 === sistema2);
-
 //=================================================================
 
 /*
@@ -44,20 +36,20 @@ Definido como um modelo de criação/cadastro de veículos no sistema. É um mé
 */
 
 interface Veiculo {
-    modelo: string;
+    modelo: ModeloBase;
     placa: string;
 }
 
 class Carro implements Veiculo {
     constructor(
-        public modelo: string,
+        public modelo: ModeloBase,
         public placa: string
     ) { }
 }
 
 class Moto implements Veiculo {
     constructor(
-        public modelo: string,
+        public modelo: ModeloBase,
         public placa: string
     ) { }
 }
@@ -65,12 +57,12 @@ class Moto implements Veiculo {
 //Classe abstrata para criação do veículo
 abstract class CriarVeiculo {
     public abstract criarVeiculo( 
-        modelo: string,
+        modelo: ModeloBase,
         placa: string
     ): Veiculo;
 
     public cadastrarVeiculo(
-        modelo: string,
+        modelo: ModeloBase,
         placa: string
     ): Veiculo {
         const veiculo = this.criarVeiculo(modelo, placa);
@@ -81,24 +73,22 @@ abstract class CriarVeiculo {
 
 //Decisão de qual veículo criar
 class CriarCarro extends CriarVeiculo {
-    public criarVeiculo(modelo: string, placa: string): Veiculo {
+    public criarVeiculo(
+        modelo: ModeloBase, 
+        placa: string
+    ): Veiculo {
         return new Carro(modelo, placa);
     }
 }
 
 class CriarMoto extends CriarVeiculo {
-    public criarVeiculo(modelo: string, placa: string): Veiculo {
+    public criarVeiculo(
+        modelo: ModeloBase, 
+        placa: string
+    ): Veiculo {
         return new Moto(modelo, placa);
     }
 }
-
-//Teste da implementação
-console.log("\nFACTORY METHOD")
-
-const criar = new CriarCarro();
-const carro = criar.cadastrarVeiculo("Chevrolet Chevette","ABC1B34");
-
-console.log(carro);
 
 //=================================================================
 
@@ -167,17 +157,6 @@ class FabricaPremium implements FabricaAluguel {
         return new AssistenciaPremium();
     }
 }
-
-//Teste da implementação
-console.log("\nABSTRACT FACTORY")
-
-const fabrica = new FabricaPremium();
-const seguro = fabrica.criarSeguro();
-const assistencia = fabrica.criarAssistencia();
-
-seguro.contratar();
-assistencia.ativar();
-
 //=================================================================
 
 /*
@@ -194,6 +173,8 @@ interface Reserva {
     quilometragem?: string;
     anoFabricacao?: string;
     valor: number;
+    seguro?: Seguro;
+    assistencia?: Assistencia;
 }
 
 class ReservaBuilder {
@@ -205,6 +186,8 @@ class ReservaBuilder {
     private quilometragemReserva?: string;
     private anoFabricacaoReserva?: string;
     private valorReserva = 0;
+    private seguroReserva?: Seguro;
+    private assistenciaReserva?: Assistencia;
 
     defCliente(cliente: string) {
         this.clienteReserva = cliente;
@@ -246,6 +229,16 @@ class ReservaBuilder {
         return this;
     }
 
+    defSeguro(seguro: Seguro) {
+        this.seguroReserva = seguro;
+        return this;
+    }
+
+    defAssistencia(assistencia: Assistencia) {
+        this.assistenciaReserva = assistencia;
+        return this;
+    }
+
     build(): Reserva {
         const reserva: Reserva = {
             cliente: this.clienteReserva,
@@ -267,23 +260,17 @@ class ReservaBuilder {
             reserva.anoFabricacao = this.anoFabricacaoReserva;
         }
 
+        if(this.seguroReserva !== undefined) {
+            reserva.seguro = this.seguroReserva;
+        }
+
+        if(this.assistenciaReserva !== undefined) {
+            reserva.assistencia = this.assistenciaReserva;
+        }
+
         return reserva;
     }
 }
-
-//Teste da implementação
-console.log("\nBUILDER")
-
-const reserva = new ReservaBuilder()
-    .defCliente("José Cardozo")
-    .defVeiculo("Honda Civic")
-    .defDataRetirada("15/09/2026")
-    .defDataDevolucao("16/10;2026")
-    .defQuilometragem("70000")
-    .defValor(800)
-    .build();
-
-console.log(reserva)
 
 //=================================================================
 
@@ -310,14 +297,58 @@ class ModeloBase {
     }
 }
 
-//Criando um modelo e uma cópia
-const corollaBase = new ModeloBase("Toyota Corolla", "Sedan", "Automático", true);
+//=================================================================
+
+/*
+Implementação de Uso:
+-> Singleton (Uso de um único sistema)
+-> Factory (Criando o veículo) + Prototype (Utilizando bases e cópias na criação)
+-> Abstract (Definindo plano) + Builder (Criação da reserva)
+*/
+
+console.log("\nSINGLETON");
+
+const sistema1 = SistemaLocadora.obterInstancia();
+const sistema2 = SistemaLocadora.obterInstancia();
+
+console.log(sistema1 === sistema2);
+
+console.log("\nPROTOTYPE + FACTORY METHOD");
+
+//Criando um modelo base (Prototype)
+const corollaBase = new ModeloBase(
+    "Toyota Corolla",
+    "Sedan",
+    "Automático",
+    true
+);
+
 const corollaCopia = corollaBase.clone();
 
-corollaCopia.nomeModelo = "Toyota Corolla Cross";
-corollaCopia.cambio = "Manual";
+//Criando veículo (Factory)
+const criadorCarro = new CriarCarro();
 
-//Teste de implementação
-console.log("\nPROTOTYPE")
-console.log(corollaBase);
-console.log("\n",corollaCopia);
+const carro = criadorCarro.cadastrarVeiculo(
+    corollaCopia, //Usa um objeto 
+    "ABC1B34"
+);
+
+console.log(carro);
+
+console.log("\nABSTRACT FACTORY + BUILDER");
+
+//Escolhendo o plano Premium, definindo Seguro e Assistência (Abstract)
+const fabrica = new FabricaPremium();
+
+//Cadastro da reserva (Builder)
+const reserva = new ReservaBuilder()
+    .defCliente("José Cardozo")
+    .defVeiculo(carro.modelo.nomeModelo)
+    .defDataRetirada("20/10/2026")
+    .defDataDevolucao("25/10;2026")
+    .defSeguro(fabrica.criarSeguro())
+    .defAssistencia(fabrica.criarAssistencia())
+    .defValor(800)
+    .build();
+
+console.log(reserva);
