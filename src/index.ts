@@ -284,3 +284,40 @@ const reserva = new ReservaBuilder()
     .build();
 
 console.log(reserva)
+
+//=================================================================
+
+/*
+Implementação do Prototype
+Definido como um serviço de clonagem e alteração de modelos. Os modelos podem ter uma base definida no sistema, mas podem ser gerados clones com alterações seguindo a base, mantendo a integridade da base.
+*/
+
+class ModeloBase {
+    constructor(
+        public nomeModelo: string,
+        public categoria: string,
+        public cambio: string,
+        public gps: boolean
+    ) {}
+
+    clone(): ModeloBase {
+        return new ModeloBase(
+            this.nomeModelo,
+            this.categoria,
+            this.cambio,
+            this.gps
+        );
+    }
+}
+
+//Criando um modelo e uma cópia
+const corollaBase = new ModeloBase("Toyota Corolla", "Sedan", "Automático", true);
+const corollaCopia = corollaBase.clone();
+
+corollaCopia.nomeModelo = "Toyota Corolla Cross";
+corollaCopia.cambio = "Manual";
+
+//Teste de implementação
+console.log("\nPROTOTYPE")
+console.log(corollaBase);
+console.log("\n",corollaCopia);

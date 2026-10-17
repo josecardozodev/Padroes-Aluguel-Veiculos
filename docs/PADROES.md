@@ -27,6 +27,8 @@ Por quê: esse padrão auxilia na criação de objetos complexos que possuem vá
 
 Dentro do escopo, o defini como um serviço da reserva do aluguel, como se fosse um formulário no qual apenas certos campos são de preenchimento obrigatório.
 
-# Demais planejamentos pré-implementação:
+# Prototype
+Onde: src/index.ts | Linha 291
+Por quê: o padrão permite criar um modelo para um objeto e reutilizá-lo para criação de novos, sem interferir no original.
 
-Prototype: possivelmente irei utilizar para clonar modelos dos veículos ou algo semelhante.
+Dentro do escopo, está sendo usado como um serviço de clonagem de modelos de carros
